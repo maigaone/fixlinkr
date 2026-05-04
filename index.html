@@ -1,921 +1,963 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.5">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixLinkr - Transparent Auto Repairs Marketplace</title>
+    <meta name="description" content="Compare local mechanics, see real prices, and approve all work upfront. No surprises, guaranteed.">
+    <meta name="keywords" content="auto repair, mechanic, car service, transparent pricing, fixlinkr">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4b5563;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #2563eb;
+            color: #2563eb;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-large {
+            padding: 14px 32px;
+            font-size: 1.1rem;
+        }
+
+        .btn-xlarge {
+            padding: 16px 40px;
+            font-size: 1.2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 160px 20px 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 50px;
+            opacity: 0.95;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Search Box */
+        .search-box {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            display: flex;
+            gap: 16px;
+            max-width: 900px;
+            margin: 0 auto 50px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .search-input {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background: #f9fafb;
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .search-input i {
+            color: #9ca3af;
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .search-input select,
+        .search-input input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 40px;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 20px;
+            background: #f9fafb;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: #1f2937;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+        }
+
+        .step {
+            text-align: center;
+            background: white;
+            padding: 40px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2563eb;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .step i {
+            font-size: 3rem;
+            color: #2563eb;
+            margin: 20px 0;
+        }
+
+        .step h3 {
+            margin: 16px 0 12px;
+            font-size: 1.3rem;
+        }
+
+        /* Services */
+        .services {
+            padding: 80px 20px;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            border-color: #2563eb;
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .service-card i {
+            font-size: 3rem;
+            color: #2563eb;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .service-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #10b981;
+            margin: 12px 0;
+        }
+
+        /* Price Lock Badge */
+        .price-lock {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-top: 10px;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            background: #111827;
+            color: white;
+            padding: 60px 20px 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .footer-section a {
+            display: block;
+            color: #9ca3af;
+            text-decoration: none;
+            margin-bottom: 12px;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            ring: 2px solid #2563eb;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .steps, .service-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero {
+                padding: 120px 20px 60px;
+            }
+        }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;FixLinkr - Transparent Auto Repairs&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="description" content="Compare local mechanics, see real prices, and approve all work upfront. No surprises, guaranteed."&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>* {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-sizing: border-box;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.6;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #1f2937;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 1280px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0 24px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Navigation */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.navbar {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 1px 3px rgba(0,0,0,0.1);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: fixed;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>top: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>z-index: 1000;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.navbar .container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: space-between;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 16px 24px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.logo {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #2563eb;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-decoration: none;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.logo i {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-right: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-links {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 32px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-links a {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-decoration: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #4b5563;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 500;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: color 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.nav-links a:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #2563eb;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Buttons */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-primary {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #2563eb;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 24px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-decoration: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: inline-block;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-primary:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #1d4ed8;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-2px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 12px rgba(37,99,235,0.3);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-outline {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: transparent;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid #2563eb;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #2563eb;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 24px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-decoration: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: inline-block;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-outline:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #2563eb;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-large {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 14px 32px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.1rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-xlarge {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 16px 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.2rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Hero Section */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.hero {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 160px 20px 100px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.hero h1 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 3.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: fadeInUp 0.8s ease;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.hero .subtitle {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.3rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 700px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto 50px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0.95;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: fadeInUp 0.8s ease 0.1s both;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes fadeInUp {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>from {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>opacity: 0;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>transform: translateY(30px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>to {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>opacity: 1;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>transform: translateY(0);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Search Box */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.search-box {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 24px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 20px 40px rgba(0,0,0,0.2);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 900px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto 50px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-wrap: wrap;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: fadeInUp 0.8s ease 0.2s both;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.search-input {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex: 1;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #f9fafb;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 14px 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #e5e7eb;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.search-input i {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #9ca3af;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-right: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.2rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.search-input select,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.search-input input {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex: 1;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: transparent;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>outline: none;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Trust Badges */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.trust-badges {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-wrap: wrap;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animation: fadeInUp 0.8s ease 0.3s both;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.badge {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255,255,255,0.2);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(10px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.9rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* How It Works */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.how-it-works {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 80px 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #f9fafb;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.section-title {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 60px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #1f2937;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.steps {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 32px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 40px 24px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 6px rgba(0,0,0,0.05);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: transform 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-5px);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 25px rgba(0,0,0,0.1);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step-number {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>top: -20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>left: 50%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transform: translateX(-50%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #2563eb;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.2rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step i {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 3rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #2563eb;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 20px 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step h3 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 16px 0 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.3rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Services */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.services {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 80px 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.service-grid {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 32px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.service-card {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 32px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid #e5e7eb;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.service-card:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-color: #2563eb;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transform: scale(1.02);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 25px rgba(0,0,0,0.1);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.service-card i {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 3rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #2563eb;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.service-card h3 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.3rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.service-price {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #10b981;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 12px 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* CTA Section */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.cta {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 80px 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.cta h2 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.cta-buttons {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-wrap: wrap;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Footer */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>footer {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #111827;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 60px 20px 30px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.footer-grid {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 50px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.footer-section h4 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.1rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.footer-section a {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #9ca3af;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-decoration: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: color 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.footer-section a:hover {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.footer-bottom {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding-top: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-top: 1px solid #374151;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #9ca3af;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Modal */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.modal {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: fixed;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>top: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>left: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(0,0,0,0.5);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>z-index: 2000;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.modal-content {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 500px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 90%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-height: 80vh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>overflow-y: auto;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.modal-content h2 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.form-group {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.form-group label {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 500;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.form-group input,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.form-group select,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.form-group textarea {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #d1d5db;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Responsive */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@media (max-width: 768px) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>.hero h1 {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>font-size: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>.nav-links {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>.search-box {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>.steps, .service-grid {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grid-template-columns: 1fr;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>.section-title {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>font-size: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>.cta-buttons {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Navigation --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;nav class="navbar"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#" class="logo"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;i class="fas fa-wrench"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span&gt;FixLinkr&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="nav-links"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#home"&gt;Home&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#how-it-works"&gt;How It Works&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#services"&gt;Services&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;a href="#mechanics"&gt;For Mechanics&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="btn-primary" onclick="showModal('search')"&gt;Find a Mechanic&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="btn-outline" onclick="showModal('shop')"&gt;List Your Shop&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Hero Section --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="hero" id="home"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1&gt;Fix Your Car.&lt;br&gt;No Surprises.&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="subtitle"&gt;Compare local mechanics, see real prices, and approve all work upfront. 100% transparent.&lt;/p&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Search Box --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="search-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="search-input"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-wrench"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;select id="serviceSelect"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value=""&gt;Select Service&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="oil-change"&gt;Oil Change&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="brake-repair"&gt;Brake Repair&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="tire-rotation"&gt;Tire Rotation&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="engine-diagnostic"&gt;Engine Diagnostic&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="ac-repair"&gt;AC Repair&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="transmission"&gt;Transmission Service&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="search-input"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-map-marker-alt"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;input type="text" id="locationInput" placeholder="City, State or ZIP Code"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="btn-primary btn-large" onclick="searchShops()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-search"&gt;&lt;/i&gt; Find Shops</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- Trust Badges --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="trust-badges"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="badge"&gt;&lt;i class="fas fa-lock"&gt;&lt;/i&gt; Price Lock Guarantee&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="badge"&gt;&lt;i class="fas fa-check-circle"&gt;&lt;/i&gt; No Surprise Fees&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="badge"&gt;&lt;i class="fas fa-star"&gt;&lt;/i&gt; Verified Reviews&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="badge"&gt;&lt;i class="fas fa-handshake"&gt;&lt;/i&gt; Add-on Approval Required&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="badge"&gt;&lt;i class="fas fa-shield-alt"&gt;&lt;/i&gt; 100% Satisfaction&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- How It Works --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="how-it-works" id="how-it-works"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="section-title"&gt;How FixLinkr Works&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="steps"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="step"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="step-number"&gt;1&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-search"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Search &amp; Compare&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Find local shops with published prices. Compare services side-by-side with real customer reviews.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="step"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="step-number"&gt;2&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-calendar-check"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Book &amp; Pay Deposit&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Choose your time slot and pay a small deposit (25%) to secure your booking.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="step"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="step-number"&gt;3&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-clipboard-list"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Approve Add-ons&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Mechanics must get your approval for any additional work with price and photo evidence.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="step"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="step-number"&gt;4&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-star"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Review &amp; Earn&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Leave service-specific reviews and earn $5 credit for your next repair.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Services --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="services" id="services"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="section-title"&gt;Popular Services with Price Transparency&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="service-grid"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="service-card" onclick="bookService('Oil Change')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-oil-can"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Oil Change&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="service-price"&gt;$49 - $89&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Full synthetic or conventional oil change with filter&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;small style="color: #10b981;"&gt;✓ Price Locked&lt;/small&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="service-card" onclick="bookService('Brake Repair')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-car-crash"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Brake Repair&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="service-price"&gt;$119 - $299&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Front or rear brake pads, includes inspection&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;small style="color: #10b981;"&gt;✓ Price Locked&lt;/small&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="service-card" onclick="bookService('Tire Rotation')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-tire"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Tire Rotation&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="service-price"&gt;$29 - $49&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Rotate all 4 tires, check pressure and wear&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;small style="color: #10b981;"&gt;✓ Price Locked&lt;/small&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="service-card" onclick="bookService('Engine Diagnostic')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-microchip"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Engine Diagnostic&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="service-price"&gt;$89 - $149&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Check engine light diagnosis with report&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;small style="color: #10b981;"&gt;✓ Price Locked&lt;/small&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="service-card" onclick="bookService('AC Repair')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-snowflake"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;AC Repair&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="service-price"&gt;$149 - $399&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;AC diagnosis, recharge, or repair&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;small style="color: #10b981;"&gt;✓ Price Locked&lt;/small&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="service-card" onclick="bookService('Transmission')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-cogs"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;Transmission Service&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="service-price"&gt;$199 - $499&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Fluid change, filter, and inspection&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;small style="color: #10b981;"&gt;✓ Price Locked&lt;/small&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- CTA Section --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="cta" id="mechanics"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2&gt;Own a Mechanic Shop?&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p style="font-size: 1.2rem; margin-bottom: 20px;"&gt;Join FixLinkr and get more customers with our transparent pricing model.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="cta-buttons"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="btn-primary btn-xlarge" onclick="showModal('shop')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-tools"&gt;&lt;/i&gt; List Your Shop - Free Trial</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button class="btn-outline btn-xlarge" onclick="showPricing()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;i class="fas fa-chart-line"&gt;&lt;/i&gt; View Pricing Plans</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Footer --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;footer&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="footer-grid"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="footer-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="logo" style="color: white; margin-bottom: 16px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;i class="fas fa-wrench"&gt;&lt;/i&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span&gt;FixLinkr&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Making auto repairs fair and transparent since 2024.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="footer-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4&gt;For Car Owners&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#" onclick="showModal('search')"&gt;Find a Mechanic&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#how-it-works"&gt;How It Works&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#services"&gt;Price Guides&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#"&gt;Help Center&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="footer-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4&gt;For Mechanics&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#" onclick="showModal('shop')"&gt;List Your Shop&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#" onclick="showPricing()"&gt;Pricing Plans&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#"&gt;Success Stories&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#"&gt;Shop Dashboard&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="footer-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h4&gt;Company&lt;/h4&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#"&gt;About FixLinkr&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#"&gt;Contact Us&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#"&gt;Privacy Policy&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#"&gt;Terms of Service&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;a href="#"&gt;Dispute Policy&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="footer-bottom"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;&amp;copy; 2024 FixLinkr.com. All rights reserved. Your trusted auto repair marketplace.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/footer&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Modal for Search/Booking --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="modal" class="modal"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="modal-content"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 id="modalTitle"&gt;Find a Mechanic&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="modalBody"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="btn-outline" style="margin-top: 20px; width: 100%;" onclick="closeModal()"&gt;Close&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Sample shops data (in real app, this comes from database)</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const sampleShops = [</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ name: "ABC Auto Care", rating: 4.8, price: 89, distance: 1.2, verified: true, nextSlot: "Today 2PM" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ name: "FixLinkr Certified Center", rating: 4.9, price: 79, distance: 2.5, verified: true, nextSlot: "Tomorrow 9AM" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ name: "Quick Lube Express", rating: 4.5, price: 69, distance: 0.8, verified: false, nextSlot: "Today 4PM" },</p>
-<p class="p1"><span class="Apple-converted-space">            </span>{ name: "Master Mechanics", rating: 4.7, price: 99, distance: 3.1, verified: true, nextSlot: "Tomorrow 11AM" }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showModal(type) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const modal = document.getElementById('modal');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const title = document.getElementById('modalTitle');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const body = document.getElementById('modalBody');</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (type === 'search') {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>title.innerHTML = '🔧 Find a Mechanic';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>body.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label&gt;Service Needed&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;select id="modalService"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option&gt;Oil Change&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option&gt;Brake Repair&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option&gt;Tire Rotation&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option&gt;Engine Diagnostic&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option&gt;AC Repair&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label&gt;Your Location&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="text" placeholder="Enter ZIP code or city" id="modalLocation"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label&gt;Vehicle (optional)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="text" placeholder="e.g., 2020 Toyota Camry"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button class="btn-primary" style="width: 100%;" onclick="searchAndShowResults()"&gt;Search Now&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else if (type === 'shop') {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>title.innerHTML = '🏪 List Your Shop on FixLinkr';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>body.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label&gt;Shop Name&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="text" id="shopName" placeholder="e.g., ABC Auto Repair"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label&gt;Email&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="email" id="shopEmail" placeholder="contact@your shop.com"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label&gt;Phone&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="tel" id="shopPhone" placeholder="(555) 123-4567"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label&gt;Address&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="text" id="shopAddress" placeholder="Street address"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label&gt;Services Offered&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;select id="shopServices" multiple size="3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option&gt;Oil Change&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option&gt;Brake Repair&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option&gt;Tire Rotation&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option&gt;Engine Diagnostic&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option&gt;AC Repair&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;option&gt;Transmission&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;small&gt;Hold Ctrl/Cmd to select multiple&lt;/small&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button class="btn-primary" style="width: 100%;" onclick="submitShopListing()"&gt;Submit Application&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>modal.style.display = 'flex';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function closeModal() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('modal').style.display = 'none';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function searchShops() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const service = document.getElementById('serviceSelect').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const location = document.getElementById('locationInput').value;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!service || !location) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>alert('Please select a service and enter your location');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>showSearchResults(service, location);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function searchAndShowResults() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const service = document.getElementById('modalService')?.value || 'Oil Change';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const location = document.getElementById('modalLocation')?.value || 'Your Area';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>closeModal();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>showSearchResults(service, location);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showSearchResults(service, location) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let resultsHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 2000; overflow-y: auto; padding: 80px 20px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="max-width: 900px; margin: 0 auto;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button onclick="closeResults()" style="float: right; padding: 10px 20px; background: #f3f4f6; border: none; border-radius: 8px; cursor: pointer;"&gt;✕ Close&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h2 style="margin-bottom: 10px;"&gt;🔧 ${service} in ${location}&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p style="color: #6b7280; margin-bottom: 30px;"&gt;${sampleShops.length} shops found near you&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>sampleShops.forEach(shop =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>resultsHTML += `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 20px; background: white;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;h3 style="font-size: 1.2rem; margin-bottom: 5px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>${shop.name}</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>${shop.verified ? '&lt;span style="background: #10b981; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.75rem; margin-left: 8px;"&gt;✓ Verified&lt;/span&gt;' : ''}</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div style="color: #f59e0b; margin: 5px 0;"&gt;${'⭐'.repeat(Math.floor(shop.rating))} ${shop.rating}&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div style="margin: 8px 0;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;span style="font-size: 1.5rem; font-weight: bold; color: #10b981;"&gt;$${shop.price}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;span style="color: #6b7280;"&gt; starting price&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div style="margin: 5px 0;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;span&gt;📍 ${shop.distance} miles away&lt;/span&gt;&lt;br&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;span&gt;⏰ Next: ${shop.nextSlot}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div style="margin-top: 15px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="btn-primary" style="margin-right: 10px;" onclick="bookService('${service}', '${shop.name}', ${shop.price})"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>Book Now</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="btn-outline" onclick="viewShopDetails('${shop.name}')"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                    </span>View Details</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>resultsHTML += `</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div style="text-align: center; margin-top: 30px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button class="btn-outline" onclick="closeResults()"&gt;Close&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.body.insertAdjacentHTML('beforeend', resultsHTML);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function closeResults() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const resultsDiv = document.querySelector('div[style*="position: fixed"]');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (resultsDiv) resultsDiv.remove();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function bookService(service, shopName, price) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>closeResults();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const bookingHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 2000; overflow-y: auto; padding: 80px 20px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div style="max-width: 600px; margin: 0 auto;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button onclick="closeBooking()" style="float: right; padding: 10px 20px; background: #f3f4f6; border: none; border-radius: 8px; cursor: pointer;"&gt;✕ Close&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;h2 style="margin-bottom: 20px;"&gt;📅 Book ${service}&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 20px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p&gt;&lt;strong&gt;Shop:&lt;/strong&gt; ${shopName || 'Selected Shop'}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p&gt;&lt;strong&gt;Service:&lt;/strong&gt; ${service}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p&gt;&lt;strong&gt;Price Lock:&lt;/strong&gt; $${price || 89}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p&gt;&lt;strong&gt;Deposit (25%):&lt;/strong&gt; $${((price || 89) * 0.25).toFixed(2)}&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label&gt;Select Date &amp; Time&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="datetime-local" id="bookingDateTime"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label&gt;Vehicle Info&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;input type="text" placeholder="Year, Make, Model" id="vehicleInfo"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="form-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;label&gt;Notes (optional)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;textarea rows="3" placeholder="Any special requests or issues to address"&gt;&lt;/textarea&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div style="background: #dbeafe; padding: 15px; border-radius: 8px; margin: 20px 0;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p style="margin: 0;"&gt;🔒 &lt;strong&gt;Price Lock Guarantee:&lt;/strong&gt; The price you see is the price you pay. Any additional work requires your approval first.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;button class="btn-primary" style="width: 100%;" onclick="processBooking()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                                </span>Continue to Payment (25% Deposit)</p>
-<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>document.body.insertAdjacentHTML('beforeend', bookingHTML);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}, 100);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function closeBooking() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const bookingDiv = document.querySelector('div[style*="Booking"]') || document.querySelector('div[style*="position: fixed"]');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (bookingDiv &amp;&amp; bookingDiv.outerHTML.includes('Book')) bookingDiv.remove();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function processBooking() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>alert('✅ Booking Confirmed!\n\nYou will receive:\n1. Confirmation email with details\n2. Option to approve/disapprove any add-ons\n3. 24/7 support if issues arise\n\nIn the full version, you would now:\n- Pay deposit via Stripe\n- Get real-time updates\n- Chat with mechanic\n- Track service progress');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>closeBooking();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function viewShopDetails(shopName) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>closeResults();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>alert(`🏪 ${shopName}\n\n📞 Phone: (555) 123-4567\n📍 Address: 123 Main St\n⭐ Rating: 4.8 (247 reviews)\n🔧 Warranty: 90 days\n✅ Verified Shop\n\nServices offered:\n• Oil Change - $49\n• Brake Repair - $119\n• Tire Rotation - $29\n• Engine Diagnostic - $89\n\nIn the full version, you can:\n• See all service prices\n• Read detailed reviews\n• Check availability\n• Book directly`);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}, 100);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function submitShopListing() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const name = document.getElementById('shopName')?.value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const email = document.getElementById('shopEmail')?.value;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (!name || !email) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>alert('Please fill in all required fields');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>alert(`Thank you ${name}!\n\nYour application has been submitted.\n\nNext steps:\n1. Our team will verify your business (24-48 hours)\n2. You'll receive onboarding instructions\n3. Set up your shop profile\n4. Start getting customers!\n\nPricing plans start at $49/month for Basic plan.`);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>closeModal();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showPricing() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>alert(`💰 FixLinkr Pricing Plans for Shops\n\n🔧 Basic Plan - $49/month\n• List up to 10 services\n• Basic analytics\n• Email support\n• 5% transaction fee\n\n⭐ Pro Plan - $99/month\n• Unlimited services\n• Advanced analytics\n• Priority support\n• 3% transaction fee\n• Featured placement\n\n💎 Elite Plan - $199/month\n• Everything in Pro\n• 1% transaction fee\n• Dedicated account manager\n• API access\n• Marketing promotion\n\n🚀 Start with 30-day free trial!`);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Close modal when clicking outside</p>
-<p class="p1"><span class="Apple-converted-space">        </span>window.onclick = function(event) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const modal = document.getElementById('modal');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (event.target === modal) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>modal.style.display = 'none';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <i class="fas fa-wrench"></i>
+                <span>FixLinkr</span>
+            </a>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#services">Services</a>
+                <a href="#mechanics">For Mechanics</a>
+                <button class="btn-primary" onclick="showModal('search')">Find a Mechanic</button>
+                <button class="btn-outline" onclick="showModal('shop')">List Your Shop</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Fix Your Car.<br>No Surprises.</h1>
+            <p class="subtitle">Compare local mechanics, see real prices, and approve all work upfront. 100% transparent.</p>
+            
+            <!-- Search Box -->
+            <div class="search-box">
+                <div class="search-input">
+                    <i class="fas fa-wrench"></i>
+                    <select id="serviceSelect">
+                        <option value="">Select Service</option>
+                        <option value="oil-change">Oil Change</option>
+                        <option value="brake-repair">Brake Repair</option>
+                        <option value="tire-rotation">Tire Rotation</option>
+                        <option value="engine-diagnostic">Engine Diagnostic</option>
+                        <option value="ac-repair">AC Repair</option>
+                        <option value="transmission">Transmission Service</option>
+                    </select>
+                </div>
+                <div class="search-input">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" id="locationInput" placeholder="City, State or ZIP Code">
+                </div>
+                <button class="btn-primary btn-large" onclick="searchShops()">
+                    <i class="fas fa-search"></i> Find Shops
+                </button>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="trust-badges">
+                <div class="badge"><i class="fas fa-lock"></i> Price Lock Guarantee</div>
+                <div class="badge"><i class="fas fa-check-circle"></i> No Surprise Fees</div>
+                <div class="badge"><i class="fas fa-star"></i> Verified Reviews</div>
+                <div class="badge"><i class="fas fa-handshake"></i> Add-on Approval Required</div>
+                <div class="badge"><i class="fas fa-shield-alt"></i> 100% Satisfaction</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How FixLinkr Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <i class="fas fa-search"></i>
+                    <h3>Search & Compare</h3>
+                    <p>Find local shops with published prices. Compare services side-by-side with real customer reviews.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Book & Pay Deposit</h3>
+                    <p>Choose your time slot and pay a small deposit (25%) to secure your booking.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <i class="fas fa-clipboard-list"></i>
+                    <h3>Approve Add-ons</h3>
+                    <p>Mechanics must get your approval for any additional work with price and photo evidence.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <i class="fas fa-star"></i>
+                    <h3>Review & Earn</h3>
+                    <p>Leave service-specific reviews and earn $5 credit for your next repair.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2 class="section-title">Popular Services with Price Transparency</h2>
+            <div class="service-grid">
+                <div class="service-card" onclick="bookService('Oil Change')">
+                    <i class="fas fa-oil-can"></i>
+                    <h3>Oil Change</h3>
+                    <div class="service-price">$49 - $89</div>
+                    <p>Full synthetic or conventional oil change with filter</p>
+                    <div class="price-lock">🔒 Price Locked</div>
+                </div>
+                <div class="service-card" onclick="bookService('Brake Repair')">
+                    <i class="fas fa-car-crash"></i>
+                    <h3>Brake Repair</h3>
+                    <div class="service-price">$119 - $299</div>
+                    <p>Front or rear brake pads, includes inspection</p>
+                    <div class="price-lock">🔒 Price Locked</div>
+                </div>
+                <div class="service-card" onclick="bookService('Tire Rotation')">
+                    <i class="fas fa-tire"></i>
+                    <h3>Tire Rotation</h3>
+                    <div class="service-price">$29 - $49</div>
+                    <p>Rotate all 4 tires, check pressure and wear</p>
+                    <div class="price-lock">🔒 Price Locked</div>
+                </div>
+                <div class="service-card" onclick="bookService('Engine Diagnostic')">
+                    <i class="fas fa-microchip"></i>
+                    <h3>Engine Diagnostic</h3>
+                    <div class="service-price">$89 - $149</div>
+                    <p>Check engine light diagnosis with report</p>
+                    <div class="price-lock">🔒 Price Locked</div>
+                </div>
+                <div class="service-card" onclick="bookService('AC Repair')">
+                    <i class="fas fa-snowflake"></i>
+                    <h3>AC Repair</h3>
+                    <div class="service-price">$149 - $399</div>
+                    <p>AC diagnosis, recharge, or repair</p>
+                    <div class="price-lock">🔒 Price Locked</div>
+                </div>
+                <div class="service-card" onclick="bookService('Transmission')">
+                    <i class="fas fa-cogs"></i>
+                    <h3>Transmission Service</h3>
+                    <div class="service-price">$199 - $499</div>
+                    <p>Fluid change, filter, and inspection</p>
+                    <div class="price-lock">🔒 Price Locked</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="mechanics">
+        <div class="container">
+            <h2>Own a Mechanic Shop?</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 20px;">Join FixLinkr and get more customers with our transparent pricing model.</p>
+            <div class="cta-buttons">
+                <button class="btn-primary btn-xlarge" onclick="showModal('shop')">
+                    <i class="fas fa-tools"></i> List Your Shop - Free Trial
+                </button>
+                <button class="btn-outline btn-xlarge" onclick="showPricing()">
+                    <i class="fas fa-chart-line"></i> View Pricing Plans
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <div class="logo" style="color: white; margin-bottom: 16px;">
+                        <i class="fas fa-wrench"></i>
+                        <span>FixLinkr</span>
+                    </div>
+                    <p>Making auto repairs fair and transparent since 2024.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>For Car Owners</h4>
+                    <a onclick="showModal('search')">Find a Mechanic</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#services">Price Guides</a>
+                    <a href="#">Help Center</a>
+                </div>
+                <div class="footer-section">
+                    <h4>For Mechanics</h4>
+                    <a onclick="showModal('shop')">List Your Shop</a>
+                    <a onclick="showPricing()">Pricing Plans</a>
+                    <a href="#">Success Stories</a>
+                    <a href="#">Shop Dashboard</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <a href="#">About FixLinkr</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Dispute Policy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 FixLinkr.com. All rights reserved. Your trusted auto repair marketplace.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for Search/Booking -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Find a Mechanic</h2>
+            <div id="modalBody"></div>
+            <button class="btn-outline" style="margin-top: 20px; width: 100%;" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Sample shops data
+        const sampleShops = [
+            { name: "FixLinkr Certified Center", rating: 4.9, price: 79, distance: 1.2, verified: true, nextSlot: "Today 2PM", reviews: 247 },
+            { name: "ABC Auto Care", rating: 4.8, price: 89, distance: 2.5, verified: true, nextSlot: "Tomorrow 9AM", reviews: 189 },
+            { name: "Master Mechanics", rating: 4.7, price: 99, distance: 3.1, verified: true, nextSlot: "Tomorrow 11AM", reviews: 312 },
+            { name: "Quick Lube Express", rating: 4.5, price: 69, distance: 0.8, verified: false, nextSlot: "Today 4PM", reviews: 56 }
+        ];
+
+        function showModal(type) {
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            if (type === 'search') {
+                title.innerHTML = '🔧 Find a Mechanic';
+                body.innerHTML = `
+                    <div class="form-group">
+                        <label>Service Needed</label>
+                        <select id="modalService">
+                            <option>Oil Change</option>
+                            <option>Brake Repair</option>
+                            <option>Tire Rotation</option>
+                            <option>Engine Diagnostic</option>
+                            <option>AC Repair</option>
+                            <option>Transmission Service</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Location</label>
+                        <input type="text" id="modalLocation" placeholder="Enter ZIP code or city">
+                    </div>
+                    <div class="form-group">
+                        <label>Vehicle (optional)</label>
+                        <input type="text" id="modalVehicle" placeholder="e.g., 2020 Toyota Camry">
+                    </div>
+                    <button class="btn-primary" style="width: 100%;" onclick="searchAndShowResults()">Search Now</button>
+                `;
+            } else if (type === 'shop') {
+                title.innerHTML = '🏪 List Your Shop on FixLinkr';
+                body.innerHTML = `
+                    <div class="form-group">
+                        <label>Shop Name *</label>
+                        <input type="text" id="shopName" placeholder="e.g., ABC Auto Repair">
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="shopEmail" placeholder="contact@yourshop.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="tel" id="shopPhone" placeholder="(555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label>Address *</label>
+                        <input type="text" id="shopAddress" placeholder="Street address, city, ZIP">
+                    </div>
+                    <div class="form-group">
+                        <label>Services Offered</label>
+                        <select id="shopServices" multiple size="4">
+                            <option>Oil Change</option>
+                            <option>Brake Repair</option>
+                            <option>Tire Rotation</option>
+                            <option>Engine Diagnostic</option>
+                            <option>AC Repair</option>
+                            <option>Transmission Service</option>
+                        </select>
+                        <small style="color: #6b7280;">Hold Ctrl/Cmd to select multiple</small>
+                    </div>
+                    <button class="btn-primary" style="width: 100%;" onclick="submitShopListing()">Submit Application</button>
+                `;
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function searchShops() {
+            const service = document.getElementById('serviceSelect').value;
+            const location = document.getElementById('locationInput').value;
+            
+            if (!service || !location) {
+                alert('Please select a service and enter your location');
+                return;
+            }
+            
+            showSearchResults(service, location);
+        }
+
+        function searchAndShowResults() {
+            const service = document.getElementById('modalService')?.value || 'Oil Change';
+            const location = document.getElementById('modalLocation')?.value || 'Your Area';
+            closeModal();
+            showSearchResults(service, location);
+        }
+
+        function showSearchResults(service, location) {
+            let resultsHTML = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 2000; overflow-y: auto; padding: 80px 20px;">
+                    <div style="max-width: 900px; margin: 0 auto;">
+                        <button onclick="closeResults()" style="float: right; padding: 10px 20px; background: #f3f4f6; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">✕ Close</button>
+                        <h2 style="margin-bottom: 10px;">🔧 ${service} in ${location}</h2>
+                        <p style="color: #6b7280; margin-bottom: 30px;">${sampleShops.length} FixLinkr certified shops found near you</p>
+            `;
+            
+            sampleShops.forEach(shop => {
+                resultsHTML += `
+                    <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 20px; background: white; transition: all 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap;">
+                            <div style="flex: 1;">
+                                <h3 style="font-size: 1.3rem; margin-bottom: 8px;">
+                                    ${shop.name}
+                                    ${shop.verified ? '<span style="background: #10b981; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; margin-left: 10px;">✓ Verified</span>' : ''}
+                                </h3>
+                                <div style="color: #f59e0b; margin: 8px 0;">${'⭐'.repeat(Math.floor(shop.rating))} ${shop.rating} (${shop.reviews} reviews)</div>
+                                <div style="margin: 12px 0;">
+                                    <span style="font-size: 1.8rem; font-weight: bold; color: #10b981;">$${shop.price}</span>
+                                    <span style="color: #6b7280;"> starting price</span>
+                                </div>
+                                <div style="margin: 8px 0; color: #4b5563;">
+                                    <div>📍 ${shop.distance} miles away</div>
+                                    <div>⏰ Next available: ${shop.nextSlot}</div>
+                                    <div>🔒 Price Lock Guarantee included</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 15px;">
+                                <button class="btn-primary" style="margin-right: 10px;" onclick="bookService('${service}', '${shop.name}', ${shop.price})">
+                                    Book Now
+                                </button>
+                                <button class="btn-outline" onclick="viewShopDetails('${shop.name}')">
+                                    View Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            resultsHTML += `
+                        <div style="text-align: center; margin-top: 30px;">
+                            <button class="btn-outline" onclick="closeResults()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', resultsHTML);
+        }
+
+        function closeResults() {
+            const resultsDiv = document.querySelector('div[style*="position: fixed"]');
+            if (resultsDiv) resultsDiv.remove();
+        }
+
+        function bookService(service, shopName, price) {
+            closeResults();
+            setTimeout(() => {
+                const bookingHTML = `
+                    <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 2000; overflow-y: auto; padding: 80px 20px;">
+                        <div style="max-width: 600px; margin: 0 auto;">
+                            <button onclick="closeBooking()" style="float: right; padding: 10px 20px; background: #f3f4f6; border: none; border-radius: 8px; cursor: pointer;">✕ Close</button>
+                            <h2 style="margin-bottom: 20px;">📅 Book Your Service</h2>
+                            <div style="background: #f9fafb; padding: 24px; border-radius: 12px; margin-bottom: 24px;">
+                                <p><strong>🔧 Shop:</strong> ${shopName || 'Selected Shop'}</p>
+                                <p><strong>🛠️ Service:</strong> ${service}</p>
+                                <p><strong>💰 Price Lock:</strong> <span style="color: #10b981; font-size: 1.3rem; font-weight: bold;">$${price || 89}</span></p>
+                                <p><strong>💳 Deposit (25%):</strong> $${((price || 89) * 0.25).toFixed(2)}</p>
+                                <p><strong>✅ Balance due at shop:</strong> $${((price || 89) * 0.75).toFixed(2)}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Select Date & Time *</label>
+                                <input type="datetime-local" id="bookingDateTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Vehicle Info *</label>
+                                <input type="text" id="vehicleInfo" placeholder="e.g., 2020 Toyota Camry" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Special Requests or Issues (optional)</label>
+                                <textarea rows="3" id="notes" placeholder="Any specific issues to address?"></textarea>
+                            </div>
+                            <div style="background: #dbeafe; padding: 16px; border-radius: 8px; margin: 20px 0;">
+                                <p style="margin: 0;">🔒 <strong>Price Lock Guarantee:</strong> The price you see is the price you pay. Any additional work requires your approval with photo evidence first.</p>
+                            </div>
+                            <button class="btn-primary" style="width: 100%;" onclick="processBooking()">
+                                Continue to Payment (Secure Deposit)
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', bookingHTML);
+            }, 100);
+        }
+
+        function closeBooking() {
+            const bookingDiv = document.querySelector('div[style*="Book Your Service"]') || 
+                              document.querySelector('div[style*="position: fixed"]');
+            if (bookingDiv && bookingDiv.outerHTML.includes('Book Your Service')) bookingDiv.remove();
+        }
+
+        function processBooking() {
+            const dateTime = document.getElementById('bookingDateTime')?.value;
+            const vehicle = document.getElementById('vehicleInfo')?.value;
+            
+            if (!dateTime || !vehicle) {
+                alert('Please select date/time and enter vehicle info');
+                return;
+            }
+            
+            alert('✅ Booking Confirmed!\n\n📧 Confirmation sent to your email\n🔒 Price locked at $' + (document.querySelector('.price-lock') ? '89' : '79') + '\n📱 You can track your booking status\n💬 Chat with mechanic directly\n✅ Approve/decline any add-ons\n\nThank you for choosing FixLinkr!');
+            closeBooking();
+        }
+
+        function viewShopDetails(shopName) {
+            closeResults();
+            setTimeout(() => {
+                alert(`🏪 ${shopName}\n\n📍 Address: 123 Main Street\n📞 Phone: (555) 123-4567\n⭐ Rating: 4.8 (247 verified reviews)\n🔧 Warranty: 90 days on all work\n✅ FixLinkr Verified Shop\n\n📋 Services & Prices:\n• Oil Change - $49\n• Brake Repair - $119\n• Tire Rotation - $29\n• Engine Diagnostic - $89\n• AC Repair - $149\n\n⭐ Recent Reviews:\n"Great service, fair price!" - John D.\n"Would definitely recommend" - Sarah M.\n\n[Book Now to get Price Lock guarantee]`);
+            }, 100);
+        }
+
+        function submitShopListing() {
+            const name = document.getElementById('shopName')?.value;
+            const email = document.getElementById('shopEmail')?.value;
+            const phone = document.getElementById('shopPhone')?.value;
+            const address = document.getElementById('shopAddress')?.value;
+            
+            if (!name || !email || !phone || !address) {
+                alert('Please fill in all required fields (*)');
+                return;
+            }
+            
+            if (!email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            alert(`✅ Application Received, ${name}!\n\n📧 Confirmation sent to: ${email}\n\n📋 Next steps:\n1. Our team will review your application (24-48 hours)\n2. Background and license verification\n3. Onboarding call to set up your profile\n4. Start getting customers!\n\n💼 Pricing (30-day free trial included):\n• Basic: $49/month\n• Pro: $99/month\n• Elite: $199/month\n\nWe'll contact you within 2 business days.`);
+            closeModal();
+        }
+
+        function showPricing() {
+            alert(`💰 FixLinkr Pricing Plans for Shops\n\n🔧 Basic Plan - $49/month\n✓ List up to 10 services\n✓ Basic analytics dashboard\n✓ Email support\n✓ 5% transaction fee\n✓ Price Lock feature\n\n⭐ Pro Plan - $99/month\n✓ Unlimited services\n✓ Advanced analytics\n✓ Priority support\n✓ 3% transaction fee\n✓ Featured in search results\n✓ Marketing materials\n\n💎 Elite Plan - $199/month\n✓ Everything in Pro\n✓ 1% transaction fee\n✓ Dedicated account manager\n✓ API access\n✓ Premium placement\n✓ Brand partnership opportunities\n\n🚀 Start with 30-day free trial!\nAll plans include Price Lock Guarantee and Add-on Approval system.`);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
