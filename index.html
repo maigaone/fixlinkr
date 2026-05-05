@@ -959,5 +959,237 @@
             });
         });
     </script>
+
+    <!-- Supabase Library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    // Initialize Supabase (replace with YOUR keys)
+    const SUPABASE_URL = 'https://njpvzjpphizonxhtqomg.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qcHZ6anBwaGl6b254aHRxb21nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMTM4NjgsImV4cCI6MjA5MzU4OTg2OH0.gQGkgQNFVWdGojrfkQ55WhtS83pNL-txX3uFH3jlnpY';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Function to load real shops from database
+    async function loadRealShops(service, location) {
+        // First, get the service ID
+        const { data: serviceData } = await supabase
+            .from('services')
+            .select('id')
+            .eq('name', service)
+            .single();
+        
+        if (!serviceData) return [];
+        
+        // Get shops offering this service
+        const { data: shopServices } = await supabase
+            .from('shop_services')
+            .select(`
+                price,
+                duration_minutes,
+                shops (
+                    id,
+                    name,
+                    rating,
+                    total_reviews,
+                    verified,
+                    address,
+                    city
+                )
+            `)
+            .eq('service_id', serviceData.id)
+            .eq('is_available', true);
+        
+        return shopServices || [];
+    }
+
+    // Replace the existing searchShops function
+    async function searchShops() {
+        const service = document.getElementById('serviceSelect').value;
+        const location = document.getElementById('locationInput').value;
+        
+        if (!service || !location) {
+            alert('Please select a service and enter your location');
+            return;
+        }
+        
+        // Show loading
+        const searchBtn = event.target;
+        const originalText = searchBtn.innerHTML;
+        searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+        searchBtn.disabled = true;
+        
+        // Load from database
+        const shops = await loadRealShops(service, location);
+        
+        searchBtn.innerHTML = originalText;
+        searchBtn.disabled = false;
+        
+        // Display results
+        showSearchResults(service, location, shops);
+    }
+
+    // Updated showSearchResults to use database data
+    function showSearchResults(service, location, shops) {
+        if (!shops || shops.length === 0) {
+            alert('No shops found for this service. Please try another service.');
+            return;
+        }
+        
+        let resultsHTML = `
+            <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 2000; overflow-y: auto; padding: 80px 20px;">
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <button onclick="closeResults()" style="float: right; padding: 10px 20px;">✕ Close</button>
+                    <h2 style="margin-bottom: 10px;">🔧 ${service} in ${location}</h2>
+                    <p style="color: #6b7280; margin-bottom: 30px;">${shops.length} shops found</p>
+        `;
+        
+        shops.forEach(item => {
+            const shop = item.shops;
+            resultsHTML += `
+                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 24px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                        <div style="flex: 1;">
+                            <h3 style="font-size: 1.3rem;">
+                                ${shop.name}
+                                ${shop.verified ? '<span style="background: #10b981; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; margin-left: 10px;">✓ Verified</span>' : ''}
+                            </h3>
+                            <div style="color: #f59e0b; margin: 8px 0;">${'⭐'.repeat(Math.floor(shop.rating || 4.5))} ${shop.rating || 4.5} (${shop.total_reviews || 0} reviews)</div>
+                            <div style="margin: 12px 0;">
+                                <span style="font-size: 1.8rem; font-weight: bold; color: #10b981;">$${item.price}</span>
+                                <span style="color: #6b7280;"> starting price</span>
+                            </div>
+                            <div style="margin: 8px 0; color: #4b5563;">
+                                <div>📍 ${shop.city || 'Local area'}</div>
+                                <div>🔒 Price Lock Guarantee included</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <button class="btn-primary" onclick="bookServiceFromDB('${service}', '${shop.name}', ${item.price}, '${shop.id}')">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        resultsHTML += `</div></div>`;
+        document.body.insertAdjacentHTML('beforeend', resultsHTML);
+    }
+
+    // Save booking to database
+    async function saveBookingToDatabase(bookingData) {
+        const { data, error } = await supabase
+            .from('bookings')
+            .insert([{
+                customer_name: bookingData.name,
+                customer_email: bookingData.email,
+                customer_phone: bookingData.phone,
+                shop_id: bookingData.shop_id,
+                service_name: bookingData.service,
+                price: bookingData.price,
+                deposit_paid: bookingData.price * 0.25,
+                scheduled_date: bookingData.date,
+                scheduled_time: bookingData.time,
+                vehicle_info: bookingData.vehicle,
+                status: 'pending'
+            }]);
+        
+        if (error) {
+            console.error('Error saving booking:', error);
+            return false;
+        }
+        return true;
+    }
+
+    // Updated booking function
+    function bookServiceFromDB(service, shopName, price, shopId) {
+        closeResults();
+        setTimeout(() => {
+            const bookingHTML = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 2000; overflow-y: auto; padding: 80px 20px;">
+                    <div style="max-width: 600px; margin: 0 auto;">
+                        <button onclick="closeBooking()" style="float: right; padding: 10px 20px;">✕ Close</button>
+                        <h2>📅 Book Your Service</h2>
+                        <div style="background: #f9fafb; padding: 24px; border-radius: 12px; margin-bottom: 24px;">
+                            <p><strong>🔧 Shop:</strong> ${shopName}</p>
+                            <p><strong>🛠️ Service:</strong> ${service}</p>
+                            <p><strong>💰 Price:</strong> $${price}</p>
+                            <p><strong>💳 Deposit (25%):</strong> $${(price * 0.25).toFixed(2)}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Your Name *</label>
+                            <input type="text" id="customerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="customerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone *</label>
+                            <input type="tel" id="customerPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Select Date *</label>
+                            <input type="date" id="bookingDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Select Time *</label>
+                            <input type="time" id="bookingTime" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Vehicle Info</label>
+                            <input type="text" id="vehicleInfo" placeholder="e.g., 2020 Toyota Camry">
+                        </div>
+                        <button class="btn-primary" style="width: 100%;" onclick="confirmBookingWithDB('${shopId}', '${service}', ${price})">
+                            Confirm Booking
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', bookingHTML);
+        }, 100);
+    }
+
+    // Confirm and save booking
+    async function confirmBookingWithDB(shopId, service, price) {
+        const name = document.getElementById('customerName')?.value;
+        const email = document.getElementById('customerEmail')?.value;
+        const phone = document.getElementById('customerPhone')?.value;
+        const date = document.getElementById('bookingDate')?.value;
+        const time = document.getElementById('bookingTime')?.value;
+        const vehicle = document.getElementById('vehicleInfo')?.value;
+        
+        if (!name || !email || !phone || !date || !time) {
+            alert('Please fill in all required fields');
+            return;
+        }
+        
+        const bookingData = {
+            name: name,
+            email: email,
+            phone: phone,
+            shop_id: shopId,
+            service: service,
+            price: price,
+            date: date,
+            time: time,
+            vehicle: vehicle
+        };
+        
+        const saved = await saveBookingToDatabase(bookingData);
+        
+        if (saved) {
+            alert(`✅ Booking Confirmed!\n\nWe've sent a confirmation to ${email}\n\nShop: ${shopName}\nService: ${service}\nDate: ${date} at ${time}\nDeposit: $${(price * 0.25).toFixed(2)}\n\nYou can approve/decline any add-ons later.`);
+            closeBooking();
+        } else {
+            alert('Sorry, there was an error saving your booking. Please try again.');
+        }
+    }
+</script>
+
+
+
+
 </body>
 </html>
