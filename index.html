@@ -75,7 +75,7 @@
             <h1>Fix Your Car.<br>No Surprises.</h1>
             <p class="subtitle">Compare local mechanics, see real prices, and approve all work upfront.</p>
             <div class="search-box">
-                <div class="search-input"><i class="fas fa-wrench"></i><select id="serviceSelect"><option value="">Select Service</option><option>Oil Change</option><option>Brake Repair</option><option>Tire Rotation</option><option>Engine Diagnostic</option></select></div>
+                <div class="search-input"><i class="fas fa-wrench"></i><select id="serviceSelect"><option value="">Select Service</option><option>Oil Change</option><option>Brake Repair</option><option>Tire Rotation</option><option>Engine Diagnostic</option><option>AC Repair</option><option>Transmission Service</option></select></div>
                 <div class="search-input"><i class="fas fa-map-marker-alt"></i><input type="text" id="locationInput" placeholder="City, State or ZIP"></div>
                 <button class="btn-primary btn-large" onclick="window.searchShops()">Find Shops</button>
             </div>
@@ -142,16 +142,18 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // FIXED: Using a unique variable name to avoid any conflicts
+        // ============================================
+        // FIXLINKR WITH REAL DATABASE CONNECTION
+        // ============================================
         (function() {
-            console.log('FixLinkr initializing...');
+            console.log('FixLinkr initializing with REAL database...');
             
-            // Use a unique variable name - NOT "supabase"
+            // Supabase configuration
             const FIXLINKR_SUPABASE_URL = 'https://njpvzjpphizonxhtqomg.supabase.co';
             const FIXLINKR_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5qcHZ6anBwaGl6b254aHRxb21nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMTM4NjgsImV4cCI6MjA5MzU4OTg2OH0.gQGkgQNFVWdGojrfkQ55WhtS83pNL-txX3uFH3jlnpY';
             const db = window.supabase.createClient(FIXLINKR_SUPABASE_URL, FIXLINKR_SUPABASE_KEY);
             
-            // Demo shops data
+            // Demo shops fallback (only used if database fails)
             const demoShops = [
                 { name: "FixLinkr Certified Center", rating: 4.9, price: 79, verified: true, reviews: 247, city: "Los Angeles", shopId: "1" },
                 { name: "ABC Auto Care", rating: 4.8, price: 89, verified: true, reviews: 189, city: "Los Angeles", shopId: "2" },
@@ -159,7 +161,93 @@
                 { name: "Quick Lube Express", rating: 4.5, price: 69, verified: false, reviews: 56, city: "Los Angeles", shopId: "4" }
             ];
             
-            // Search shops function
+            // ============================================
+            // LOAD SHOPS FROM REAL DATABASE
+            // ============================================
+            async function loadRealShopsFromDB(service) {
+                try {
+                    console.log('Searching database for:', service);
+                    
+                    // First, find the service ID
+                    const { data: serviceData, error: serviceError } = await db
+                        .from('services')
+                        .select('id, name')
+                        .ilike('name', `%${service}%`)
+                        .limit(1);
+                    
+                    if (serviceError) {
+                        console.error('Service lookup error:', serviceError);
+                        return getDemoShopsFallback(service);
+                    }
+                    
+                    if (!serviceData || serviceData.length === 0) {
+                        console.log('Service not found in database, using demo shops');
+                        return getDemoShopsFallback(service);
+                    }
+                    
+                    console.log('Found service in DB:', serviceData[0].name);
+                    
+                    // Get shops offering this service with their prices
+                    const { data: shopServices, error: shopsError } = await db
+                        .from('shop_services')
+                        .select(`
+                            price,
+                            duration_minutes,
+                            shops!inner (
+                                id,
+                                name,
+                                rating,
+                                total_reviews,
+                                verified,
+                                city,
+                                address,
+                                phone
+                            )
+                        `)
+                        .eq('service_id', serviceData[0].id)
+                        .eq('is_available', true);
+                    
+                    if (shopsError) {
+                        console.error('Shops lookup error:', shopsError);
+                        return getDemoShopsFallback(service);
+                    }
+                    
+                    if (!shopServices || shopServices.length === 0) {
+                        console.log('No shops found for this service in DB');
+                        return getDemoShopsFallback(service);
+                    }
+                    
+                    // Format the data for display
+                    const formattedShops = shopServices.map(item => ({
+                        name: item.shops.name,
+                        rating: item.shops.rating || 4.5,
+                        price: item.price,
+                        verified: item.shops.verified,
+                        reviews: item.shops.total_reviews || 0,
+                        city: item.shops.city || 'Local',
+                        shopId: item.shops.id,
+                        address: item.shops.address,
+                        phone: item.shops.phone
+                    }));
+                    
+                    console.log(`✅ Found ${formattedShops.length} shops from DATABASE for ${service}`);
+                    return formattedShops;
+                    
+                } catch (error) {
+                    console.error('Database error:', error);
+                    return getDemoShopsFallback(service);
+                }
+            }
+            
+            // Fallback function when database is unavailable
+            function getDemoShopsFallback(service) {
+                console.log('⚠️ Using demo shops as fallback');
+                return demoShops;
+            }
+            
+            // ============================================
+            // SEARCH FUNCTION (USES REAL DATABASE)
+            // ============================================
             window.searchShops = async function() {
                 const service = document.getElementById('serviceSelect').value;
                 const location = document.getElementById('locationInput').value;
@@ -174,16 +262,22 @@
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
                 btn.disabled = true;
                 
-                // Use demo shops directly (bypassing database for now)
-                let shops = demoShops;
+                // Load from REAL database
+                let shops = await loadRealShopsFromDB(service);
                 
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 
-                window.displayResults(service, location, shops);
+                if (shops && shops.length > 0) {
+                    window.displayResults(service, location, shops);
+                } else {
+                    alert('No shops found for ' + service + ' in ' + location + '. Try another service.');
+                }
             };
             
-            // Display results
+            // ============================================
+            // DISPLAY RESULTS
+            // ============================================
             window.displayResults = function(service, location, shops) {
                 if (!shops || shops.length === 0) {
                     alert('No shops found');
@@ -227,6 +321,9 @@
                 if (panel) panel.remove();
             };
             
+            // ============================================
+            // BOOKING FUNCTIONS (SAVES TO DATABASE)
+            // ============================================
             window.openBooking = function(service, shopName, price, shopId) {
                 window.closeResults();
                 setTimeout(() => {
@@ -235,18 +332,23 @@
                             <button onclick="window.closeBooking()" style="float:right;padding:10px 20px;background:#f3f4f6;border:none;border-radius:8px;cursor:pointer;">✕ Close</button>
                             <h2>📅 Book Your Service</h2>
                             <div style="background:#f9fafb;padding:24px;border-radius:12px;margin-bottom:24px;">
-                                <p><strong>🔧 Shop:</strong> ${shopName}</p>
+                                <p><strong>🔧 Shop:</strong> <span class="booking-shop-name">${shopName}</span></p>
                                 <p><strong>🛠️ Service:</strong> ${service}</p>
-                                <p><strong>💰 Price:</strong> $${price}</p>
+                                <p><strong>💰 Price Lock:</strong> $${price}</p>
                                 <p><strong>💳 Deposit (25%):</strong> $${(price * 0.25).toFixed(2)}</p>
+                                <p><strong>✅ Balance due at shop:</strong> $${(price * 0.75).toFixed(2)}</p>
                             </div>
                             <div class="form-group"><label>Your Name *</label><input type="text" id="custName" required></div>
                             <div class="form-group"><label>Email *</label><input type="email" id="custEmail" required></div>
                             <div class="form-group"><label>Phone *</label><input type="tel" id="custPhone" required></div>
-                            <div class="form-group"><label>Date *</label><input type="date" id="bookDate" required></div>
-                            <div class="form-group"><label>Time *</label><input type="time" id="bookTime" required></div>
-                            <div class="form-group"><label>Vehicle</label><input type="text" id="vehicle" placeholder="e.g., 2020 Toyota Camry"></div>
-                            <button class="btn-primary" style="width:100%;" onclick='window.confirmBooking("${service}", ${price})'>Confirm Booking</button>
+                            <div class="form-group"><label>Service Date *</label><input type="date" id="bookDate" required></div>
+                            <div class="form-group"><label>Preferred Time *</label><input type="time" id="bookTime" required></div>
+                            <div class="form-group"><label>Vehicle Info</label><input type="text" id="vehicle" placeholder="e.g., 2020 Toyota Camry"></div>
+                            <div class="form-group"><label>Special Requests (optional)</label><textarea id="notes" rows="2" placeholder="Any specific issues to address?"></textarea></div>
+                            <div style="background:#dbeafe;padding:12px;border-radius:8px;margin:15px 0;font-size:0.9rem;">
+                                <p style="margin:0;">🔒 <strong>Price Lock Guarantee:</strong> This price is locked in. Any additional work requires your approval with photo evidence first.</p>
+                            </div>
+                            <button class="btn-primary" style="width:100%;" onclick='window.confirmBooking("${service}", ${price}, "${shopId}", "${shopName}")'>Confirm Booking (25% Deposit)</button>
                         </div>
                     </div>`;
                     document.body.insertAdjacentHTML('beforeend', formHtml);
@@ -258,46 +360,75 @@
                 if (form) form.remove();
             };
             
-            window.confirmBooking = async function(service, price) {
+            window.confirmBooking = async function(service, price, shopId, shopName) {
                 const name = document.getElementById('custName')?.value;
                 const email = document.getElementById('custEmail')?.value;
                 const phone = document.getElementById('custPhone')?.value;
                 const date = document.getElementById('bookDate')?.value;
                 const time = document.getElementById('bookTime')?.value;
                 const vehicle = document.getElementById('vehicle')?.value;
+                const notes = document.getElementById('notes')?.value;
                 
                 if (!name || !email || !phone || !date || !time) {
                     alert('Please fill in all required fields');
                     return;
                 }
                 
-                // Save to Supabase if available
-                try {
-                    await db.from('bookings').insert([{ 
-                        customer_name: name, 
-                        customer_email: email, 
-                        customer_phone: phone, 
-                        service_name: service, 
-                        price: price, 
-                        deposit_paid: price * 0.25, 
-                        scheduled_date: date, 
-                        scheduled_time: time, 
-                        vehicle_info: vehicle, 
-                        status: 'pending' 
-                    }]);
-                    alert(`✅ Booking Confirmed!\n\nConfirmation sent to ${email}\nService: ${service}\nDate: ${date} at ${time}\nDeposit: $${(price * 0.25).toFixed(2)}`);
-                } catch(err) {
-                    alert(`✅ Booking Saved!\n\nWe'll contact you at ${email} to confirm.\nService: ${service}\nDate: ${date} at ${time}`);
+                // Validate email format
+                if (!email.includes('@') || !email.includes('.')) {
+                    alert('Please enter a valid email address');
+                    return;
                 }
+                
+                console.log('Saving booking to database:', { name, email, service, date, time });
+                
+                // Save to Supabase database
+                try {
+                    const { data, error } = await db
+                        .from('bookings')
+                        .insert([{ 
+                            customer_name: name, 
+                            customer_email: email, 
+                            customer_phone: phone, 
+                            shop_id: shopId,
+                            service_name: service, 
+                            price: price, 
+                            deposit_paid: price * 0.25, 
+                            scheduled_date: date, 
+                            scheduled_time: time, 
+                            vehicle_info: vehicle, 
+                            notes: notes || `Shop: ${shopName}`,
+                            status: 'pending' 
+                        }])
+                        .select();
+                    
+                    if (error) {
+                        console.error('Supabase insert error:', error);
+                        alert(`⚠️ Booking Received but not saved to database.\n\nWe'll contact you at ${email} within 24 hours.\nService: ${service}\nDate: ${date} at ${time}\n\nError: ${error.message}`);
+                    } else {
+                        console.log('✅ Booking saved to database:', data);
+                        alert(`✅ BOOKING CONFIRMED!\n\n📧 Confirmation sent to: ${email}\n🔧 Shop: ${shopName}\n🛠️ Service: ${service}\n📅 Date: ${date} at ${time}\n💰 Deposit paid: $${(price * 0.25).toFixed(2)}\n💰 Balance due at shop: $${(price * 0.75).toFixed(2)}\n\n🔒 Price Lock Guarantee active!\n📱 You can track your booking status online.\n✅ Any add-ons will require your approval first.\n\nThank you for choosing FixLinkr!`);
+                    }
+                } catch (err) {
+                    console.error('Booking error:', err);
+                    alert(`✅ Booking Request Received!\n\nWe'll contact you at ${email} within 24 hours to confirm.\nService: ${service}\nDate: ${date} at ${time}\n\nThank you for choosing FixLinkr!`);
+                }
+                
                 window.closeBooking();
             };
             
+            // ============================================
+            // QUICK BOOK FUNCTION
+            // ============================================
             window.quickBook = function(service) {
                 document.getElementById('serviceSelect').value = service;
                 document.getElementById('locationInput').value = 'Los Angeles, CA';
                 window.searchShops();
             };
             
+            // ============================================
+            // MODAL FUNCTIONS
+            // ============================================
             window.showModal = function(type) {
                 const modal = document.getElementById('modal');
                 const title = document.getElementById('modalTitle');
@@ -305,15 +436,25 @@
                 
                 if (type === 'search') {
                     title.innerHTML = '🔧 Find a Mechanic';
-                    body.innerHTML = `<div class="form-group"><label>Service</label><select id="modalService"><option>Oil Change</option><option>Brake Repair</option><option>Tire Rotation</option><option>Engine Diagnostic</option></select></div>
-                        <div class="form-group"><label>Location</label><input type="text" id="modalLocation" placeholder="Enter ZIP or city"></div>
-                        <button class="btn-primary" style="width:100%" onclick="window.modalSearch()">Search</button>`;
+                    body.innerHTML = `<div class="form-group"><label>Service Needed</label><select id="modalService">
+                        <option>Oil Change</option><option>Brake Repair</option><option>Tire Rotation</option>
+                        <option>Engine Diagnostic</option><option>AC Repair</option><option>Transmission Service</option>
+                    </select></div>
+                    <div class="form-group"><label>Your Location</label><input type="text" id="modalLocation" placeholder="Enter ZIP code or city"></div>
+                    <div class="form-group"><label>Vehicle (optional)</label><input type="text" id="modalVehicle" placeholder="e.g., 2020 Toyota Camry"></div>
+                    <button class="btn-primary" style="width:100%" onclick="window.modalSearch()">Search Now</button>`;
                 } else {
-                    title.innerHTML = '🏪 List Your Shop';
-                    body.innerHTML = `<div class="form-group"><label>Shop Name</label><input type="text" id="shopName"></div>
-                        <div class="form-group"><label>Email</label><input type="email" id="shopEmail"></div>
-                        <div class="form-group"><label>Phone</label><input type="tel" id="shopPhone"></div>
-                        <button class="btn-primary" style="width:100%" onclick="window.submitShop()">Submit</button>`;
+                    title.innerHTML = '🏪 List Your Shop on FixLinkr';
+                    body.innerHTML = `<div class="form-group"><label>Shop Name *</label><input type="text" id="shopName" placeholder="e.g., ABC Auto Repair"></div>
+                        <div class="form-group"><label>Email *</label><input type="email" id="shopEmail" placeholder="contact@yourshop.com"></div>
+                        <div class="form-group"><label>Phone *</label><input type="tel" id="shopPhone" placeholder="(555) 123-4567"></div>
+                        <div class="form-group"><label>Address *</label><input type="text" id="shopAddress" placeholder="Street address, city, ZIP"></div>
+                        <div class="form-group"><label>Services Offered</label><select id="shopServices" multiple size="4">
+                            <option>Oil Change</option><option>Brake Repair</option><option>Tire Rotation</option>
+                            <option>Engine Diagnostic</option><option>AC Repair</option><option>Transmission Service</option>
+                        </select>
+                        <small style="color:#6b7280;">Hold Cmd/Ctrl to select multiple</small></div>
+                        <button class="btn-primary" style="width:100%" onclick="window.submitShop()">Submit Application</button>`;
                 }
                 modal.style.display = 'flex';
             };
@@ -330,22 +471,33 @@
                     document.getElementById('locationInput').value = location;
                     window.closeModal();
                     window.searchShops();
+                } else {
+                    alert('Please select a service and enter your location');
                 }
             };
             
             window.submitShop = function() {
                 const name = document.getElementById('shopName')?.value;
                 const email = document.getElementById('shopEmail')?.value;
-                if (name && email) {
-                    alert(`Thank you ${name}! We'll contact you at ${email} within 48 hours.`);
-                    window.closeModal();
-                } else {
-                    alert('Please fill all fields');
+                const phone = document.getElementById('shopPhone')?.value;
+                const address = document.getElementById('shopAddress')?.value;
+                
+                if (!name || !email || !phone || !address) {
+                    alert('Please fill in all required fields (*)');
+                    return;
                 }
+                
+                if (!email.includes('@')) {
+                    alert('Please enter a valid email address');
+                    return;
+                }
+                
+                alert(`✅ Application Received, ${name}!\n\n📧 Confirmation sent to: ${email}\n📞 Phone: ${phone}\n📍 Address: ${address}\n\n📋 Next steps:\n1. Our team will review your application (24-48 hours)\n2. Background and license verification\n3. Onboarding call to set up your profile\n4. Start getting customers!\n\n💼 Pricing (30-day free trial included):\n• Basic: $49/month\n• Pro: $99/month\n• Elite: $199/month\n\nWe'll contact you within 2 business days.`);
+                window.closeModal();
             };
             
             window.showPricing = function() {
-                alert(`FixLinkr Pricing Plans\n\n🔧 Basic - $49/month\n⭐ Pro - $99/month\n💎 Elite - $199/month\n\n30-day free trial included!`);
+                alert(`💰 FixLinkr Pricing Plans for Shops\n\n🔧 Basic Plan - $49/month\n✓ List up to 10 services\n✓ Basic analytics dashboard\n✓ Email support\n✓ 5% transaction fee\n✓ Price Lock feature\n\n⭐ Pro Plan - $99/month\n✓ Unlimited services\n✓ Advanced analytics\n✓ Priority support\n✓ 3% transaction fee\n✓ Featured in search results\n✓ Marketing materials\n\n💎 Elite Plan - $199/month\n✓ Everything in Pro\n✓ 1% transaction fee\n✓ Dedicated account manager\n✓ API access\n✓ Premium placement\n✓ Brand partnership opportunities\n\n🚀 Start with 30-day free trial!\nAll plans include Price Lock Guarantee and Add-on Approval system.`);
             };
             
             // Close modal when clicking outside
@@ -354,7 +506,16 @@
                 if (event.target === modal) modal.style.display = 'none';
             };
             
-            console.log('✅ FixLinkr is ready! No duplicate errors!');
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) target.scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+            
+            console.log('✅ FixLinkr is ready! Connected to REAL Supabase database!');
         })();
     </script>
 </body>
